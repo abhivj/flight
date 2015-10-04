@@ -70,6 +70,7 @@ ResultSet result = Statement.executeQuery();
 JSONArray json = new JSONArray();
 ResultSetMetaData rsmd = result.getMetaData();
 
+Set st = new HashSet();
 
 
 while(result.next()) {
@@ -82,27 +83,43 @@ while(result.next()) {
       if(rsmd.getColumnType(i)==java.sql.Types.INTEGER){
           obj.put(column_name, result.getInt(column_name));
          }
-         else if(rsmd.getColumnType(i)==java.sql.Types.NVARCHAR){
-          obj.put(column_name, result.getNString(column_name));
+         else if(rsmd.getColumnType(i)==java.sql.Types.NVARCHAR){ 
+        	 String city = result.getNString(column_name);
+          	 obj.put(column_name, city);
+          	 System.out.println(city);
+          	 st.add(city);
          }
          else
          {
-        	 obj.put(column_name, result.getObject(column_name));
+        	 Object oc = result.getObject(column_name);
+        	 obj.put(column_name, oc);
+        	 System.out.println(oc);
+        	 st.add(oc);
          }
     }
     json.add(obj);
     
 }
 
-JSONObject nj = new JSONObject();
-nj.put("Result", json);
-System.out.println(nj.toString());
+JSONObject data = new JSONObject();
+data.put("Relationship", json);
+
+JSONArray listArray = new JSONArray();
+for(Object oo:st)
+{
+	listArray.add(oo);
+}
+data.put("City", listArray);
+
+System.out.println(data.toString());
+
+
 
 %>
   <div id="myholder"></div>
  
   <script>
-  generateGraph('<%= nj %>');
+  generateGraph('<%= data %>');
 </script>
 </body>
 </html>
