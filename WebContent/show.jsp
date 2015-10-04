@@ -28,12 +28,12 @@
 
 	  var js = JSON.parse(jsons);
 	  var relationship = js.Relationship;
+	
 	  var city = js.City;
 	  var paperSize = js.paperSize;
 	//  var numberOfCities = city.length;
 	  //alert(numberOfCities);
-	  
-	  	  alert(city.length);
+
 	  	rect = new Array(city.length);
 		
 	    var paper = new joint.dia.Paper({
@@ -56,13 +56,68 @@
 		    });
 
 	    	}
+	    links = new Array(relationship.length);
+	    for(var i=0;i<relationship.length;i++)
+	    	{
+	    		var source = relationship[i].arr;
+	    		var destination = relationship[i].dep;
+	    		var flightID = relationship[i].flt;
+	    		var sourceID;
+	    		var destID;
+	    		for(var j=0;j<city.length;j++)
+	    			{
+	    			//alert(city[j].valueOf())
+	    			if(source.valueOf()==city[j].city.valueOf())
+	    				{
+	    					sourceID = rect[j].id;
+	    				}
+	    			else if(destination.valueOf()==city[j].city.valueOf())
+    				{
+    					destID = rect[j].id;
+    				}
+ 
+	    			}
+	    		links[i] = new joint.dia.Link({
+	    	        source: { id: sourceID },
+	    	        target: { id: destID },
+	    	        router: { name: 'metro' },
+	    		    connector: { name: 'rounded' },
+	    	    });
+	    		
+	    		
+	    		links[i].label(0, {
+	    		    position: .5,
+	    		   
+	    		    attrs: {
+	    		        rect: { fill: 'white' },
+	    		        text: { fill: 'blue', text: relationship[i].flt }
+	    		    }
+	    		});
+	    		
+	    	}
 	    //graph.addCells([rect[1],rect[2]]);
 	    for (var i=0; i<city.length; i++)
     	{
     	graph.addCells([rect[i]]);
     	}
-	    	
-	    	
+	    for (var i=0; i<relationship.length; i++)
+    	{
+	    	graph.addCells([links[i]]);
+    	}
+	    for(var i=0;i<links.length;i++)
+		{
+	    links[i].toBack();
+		}
+	    graph.on('change:position', function(cell) {
+
+	        // has an obstacle been moved? Then reroute the link.
+	        		for(var i=0;i<links.length;i++)
+	        			{
+	        			  if (_.contains(rect, cell)) paper.findViewByModel(links[i]).update();
+	        			}
+	      
+	    });
+
 
 	    //var rect2 = rect.clone();
 	    //rect2.translate(300);
