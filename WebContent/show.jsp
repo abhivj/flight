@@ -20,11 +20,18 @@
     
      <script type="text/javascript">
 
-  function generateGraph(json)
+  function generateGraph(jsons)
   {
+	  //alert(json.length);
 	 
 	  var graph = new joint.dia.Graph;
 
+	  var js = JSON.parse(jsons);
+	  var relationship = js.Relationship;
+	  var city = js.city;
+	//  var numberOfCities = city.length;
+	  //alert(numberOfCities);
+	  
 	    var paper = new joint.dia.Paper({
 	        el: $('#myholder'),
 	        width: 600,
@@ -105,9 +112,50 @@ JSONObject data = new JSONObject();
 data.put("Relationship", json);
 
 JSONArray listArray = new JSONArray();
+int numberOfCities = st.size();
+int dim_x[] = new int[numberOfCities];
+int dim_y[] = new int[numberOfCities];
+//double rootValue = Math.sqrt(numberOfCities);
+int rootInt = 1;//(int)rootValue;
+while ((rootInt*(rootInt+1))/2<numberOfCities)
+{
+	rootInt++;
+}
+System.out.println("Cities count "+numberOfCities);
+System.out.println(rootInt);
+int base_x = 200;
+int base_y = 200;
+
+int i= 0 ;
+int j = 0;
+while(i<numberOfCities)
+{
+	
+	for(int k=0;k<rootInt;k++)
+	{
+		dim_x[i] = base_x+k*base_x;
+		dim_y[i] = base_y+j*base_y;
+		//System.out.println(i + " %" + dim_x[i]+" :#: "+ dim_y[i]);
+		i++;
+	}
+	j++;
+	rootInt--;
+	
+}
+for(int t=0;t<numberOfCities;t++)
+{
+	//System.out.println(dim_x[t]+" : "+ dim_y[t]);
+}
+
+int count = 0;
 for(Object oo:st)
 {
-	listArray.add(oo);
+	JSONObject cityGroup = new JSONObject();
+	cityGroup.put("city", oo);
+	cityGroup.put("dim_x", dim_x[count]);
+	cityGroup.put("dim_y", dim_y[count]);
+	listArray.add(cityGroup);
+	count++;
 }
 data.put("City", listArray);
 
