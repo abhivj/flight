@@ -28,33 +28,52 @@
 
 	  var js = JSON.parse(jsons);
 	  var relationship = js.Relationship;
-	  var city = js.city;
+	  var city = js.City;
+	  var paperSize = js.paperSize;
 	//  var numberOfCities = city.length;
 	  //alert(numberOfCities);
 	  
+	  	  alert(city.length);
+	  	rect = new Array(city.length);
+		
 	    var paper = new joint.dia.Paper({
 	        el: $('#myholder'),
-	        width: 600,
-	        height: 200,
+	        //width: 600,
+	        //height: 200,
+	        width: (paperSize+1)*250 ,
+	        height: (paperSize+1)*250 ,
 	        model: graph,
 	        gridSize: 1
 	    });
+ 
+	   
+	    for (var i=0; i<city.length; i++)
+	    	{
+		    rect[i] = new joint.shapes.basic.Rect({
+		        position: { x: city[i].dim_x, y: city[i].dim_y },
+		        size: { width: 120, height: 50 },
+		        attrs: { rect: { fill: 'blue' }, text: { text: city[i].city, fill: 'white' } }
+		    });
 
-	    var rect = new joint.shapes.basic.Rect({
-	        position: { x: 200, y: 30 },
-	        size: { width: 100, height: 30 },
-	        attrs: { rect: { fill: 'blue' }, text: { text: 'my box', fill: 'white' } }
-	    });
+	    	}
+	    //graph.addCells([rect[1],rect[2]]);
+	    for (var i=0; i<city.length; i++)
+    	{
+    	graph.addCells([rect[i]]);
+    	}
+	    	
+	    	
 
-	    var rect2 = rect.clone();
-	    rect2.translate(300);
-
+	    //var rect2 = rect.clone();
+	    //rect2.translate(300);
+/*
 	    var link = new joint.dia.Link({
 	        source: { id: rect.id },
 	        target: { id: rect2.id }
 	    });
-
-	    graph.addCells([rect, rect2, link]);
+*/
+		//graph.addCells()
+	    //graph.addCells([rect, rect2, link]);
 
   }
     
@@ -121,11 +140,13 @@ while ((rootInt*(rootInt+1))/2<numberOfCities)
 {
 	rootInt++;
 }
+int paperSize = rootInt;
 System.out.println("Cities count "+numberOfCities);
 System.out.println(rootInt);
 int base_x = 200;
 int base_y = 200;
-
+int incr_x = 250;
+int incr_y = 250;
 int i= 0 ;
 int j = 0;
 while(i<numberOfCities)
@@ -133,8 +154,8 @@ while(i<numberOfCities)
 	
 	for(int k=0;k<rootInt;k++)
 	{
-		dim_x[i] = base_x+k*base_x;
-		dim_y[i] = base_y+j*base_y;
+		dim_x[i] = base_x+k*incr_x;
+		dim_y[i] = base_y+j*incr_y;
 		//System.out.println(i + " %" + dim_x[i]+" :#: "+ dim_y[i]);
 		i++;
 	}
@@ -158,7 +179,7 @@ for(Object oo:st)
 	count++;
 }
 data.put("City", listArray);
-
+data.put("paperSize",paperSize);
 System.out.println(data.toString());
 
 
