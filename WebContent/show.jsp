@@ -82,16 +82,21 @@
 	    	        target: { id: destID },
 	    	        router: { name: 'metro' },
 	    		    connector: { name: 'rounded' },
+	    		    attrs: {
+	    		        rect: { fill: 'white' },
+	    		        text: { fill: 'blue', text: relationship[i].flt },
+	    		        '.connection': { stroke: 'blue' },
+	    		        //'.marker-source': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' },
+	    		        '.marker-target': { fill: 'black', d: 'M 10 0 L 0 5 L 10 10 z' },
+	    		    }
 	    	    });
 	    		
 	    		
 	    		links[i].label(0, {
 	    		    position: .5,
-	    		   
 	    		    attrs: {
 	    		        rect: { fill: 'white' },
-	    		        text: { fill: 'blue', text: relationship[i].flt }
-	    		    }
+	    		        text: { fill: 'blue', text: relationship[i].flt }}
 	    		});
 	    		
 	    	}
@@ -104,6 +109,7 @@
     	{
 	    	graph.addCells([links[i]]);
     	}
+	    //graph.addCells(rect[2],rect[3],links[4]);
 	    for(var i=0;i<links.length;i++)
 		{
 	    links[i].toBack();
